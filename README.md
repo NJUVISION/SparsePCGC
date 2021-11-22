@@ -4,7 +4,7 @@ This study develops a unified Point Cloud Geometry (PCG) compression method thro
 
 ## News
 
-- 2021.11.23 We have published the manuscript on arxiv.
+- 2021.11.23 We have posted the manuscript on arxiv.
 
 ## Requirments
 - pytorch1.8
