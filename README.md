@@ -9,7 +9,7 @@ This study develops a unified Point Cloud Geometry (PCG) compression method thro
 - 2022.01.13 We participate in MPEG AI-3DGC (EE. 13.54). 
 
 **I am very sorry that now we can not publish the source code for publicly accessible,  due to the potential contradiction with our collaborators' security policy. But the necessary testing dataset and results are accessible. 
-The code can be open to the cross-checkers in standardization organizations like MPEG, and other authorized experts. If you want to access the source code for study, please contact Prof. Zhan Ma (mazhan@nju.edu.cn) and cc Jianqiang Wang (wangjq@smail.nju.edu.cn).**
+The code can be open to the cross-checkers in standardization organizations like MPEG, and other authorized experts.**
 
 ## Requirments
 - pytorch1.8
