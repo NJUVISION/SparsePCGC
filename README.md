@@ -14,7 +14,7 @@ correlations. The overall compression efficiency highly depends on the accuracy 
 ## Requirments
 - pytorch **1.10**
 - MinkowskiEngine 0.5 
-- docker pull jianqiang1995/pytorch:1.10.0-cuda11.1-cudnn8-devel
+- **docker pull jianqiang1995/pytorch:1.10.0-cuda11.1-cudnn8-devel**
 - **[Testdata]**: https://box.nju.edu.cn/d/6a494e48be9d4412acd2/
 - **[Results]**: https://box.nju.edu.cn/d/929a35aeb21f43cf9d42/
 - **[Pretrained Models]**: https://box.nju.edu.cn/f/ce8c527640434b6fa53b/
