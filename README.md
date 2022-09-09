@@ -5,6 +5,7 @@ correlations. The overall compression efficiency highly depends on the accuracy 
 
 
 ## News
+- 2022.09.09 Upload supplementary material, which includes comparison details. see `Supplementary_Material.pdf`
 - 2022.06.16 Source codes will be released soon to the public after the approval from the funding agency. Now We make the testing results, testing conditions, pretrained models, and other relevant materials publicly accessible.
 - 2022.06.16 We simplify the implementation and reduce the computational complexity significantly. (e.g., almost 6∼8×). At the same time, we slightly adjust model parameters and achieve better performance on sparse LiDAR point clouds.
 - 2022.01.13 We participate in MPEG AI-3DGC (EE. 13.54). 
@@ -23,5 +24,5 @@ correlations. The overall compression efficiency highly depends on the accuracy 
 
 
 ## Authors
-These files are provided by Nanjing University  [Vision Lab](https://vision.nju.edu.cn/). And thanks for the help of Prof. Dandan Ding from Hangzhou Normal University, Prof. Zhu Li from University of Missouri at Kansas. Please contact us (wangjq@smail.nju.edu.cn and mazhan@nju.edu.cn) if you have any questions.
+These files are provided by Nanjing University  [Vision Lab](https://vision.nju.edu.cn/). Thanks for the help of Prof. Dandan Ding from Hangzhou Normal University, Prof. Zhu Li from University of Missouri at Kansas. Please contact us (wangjq@smail.nju.edu.cn and mazhan@nju.edu.cn) if you have any questions.
 
