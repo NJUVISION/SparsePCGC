@@ -50,7 +50,7 @@ def main_mesh2pc(input_rootdir, output_rootdir, input_format, output_format, inp
         # random rotate
         points = random_rotate(points)
         # quantize
-        points = quantize_resolution(points, resolution=resolution, eturn_offset=False)
+        points, _, _ = quantize_resolution(points, resolution=resolution, return_offset=False)
         points = np.unique(points, axis=0)
         print("DBG!!! nums:\t", len(points))
         # save
