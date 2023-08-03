@@ -6,7 +6,7 @@ Abstract — This study develops a unified Point Cloud Geometry (PCG) compressio
 
 
 ## News
-- 2020.11.25 The paper was accpeted by TPAMI. (J. Wang, D. Ding, Z. Li, X. Feng, C. Cao and Z. Ma, "Sparse Tensor-Based Multiscale Representation for Point Cloud Geometry Compression," in IEEE Transactions on Pattern Analysis and Machine Intelligence, 2022, doi: 10.1109/TPAMI.2022.3225816.)
+- 2022.11.25 The paper was accpeted by TPAMI. (J. Wang, D. Ding, Z. Li, X. Feng, C. Cao and Z. Ma, "Sparse Tensor-Based Multiscale Representation for Point Cloud Geometry Compression," in IEEE Transactions on Pattern Analysis and Machine Intelligence, 2022, doi: 10.1109/TPAMI.2022.3225816.)
 - 2022.09.09 Upload supplementary material, which includes comparison details. see `Supplementary_Material.pdf`
 - 2022.06.16 Source codes will be released soon to the public after the approval from the funding agency. Now We make the testing results, testing conditions, pretrained models, and other relevant materials publicly accessible.
 - 2022.06.16 We simplify the implementation and reduce the computational complexity significantly. (e.g., almost 6∼8×). At the same time, we slightly adjust model parameters and achieve better performance on sparse LiDAR point clouds.
