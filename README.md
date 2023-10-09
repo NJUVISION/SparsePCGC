@@ -18,9 +18,9 @@ Abstract — This study develops a unified Point Cloud Geometry (PCG) compressio
 - pytorch **1.10**
 - MinkowskiEngine 0.5 
 - **docker pull jianqiang1995/pytorch:1.10.0-cuda11.1-cudnn8-devel**
-- **[Testdata]**: https://box.nju.edu.cn/d/25dee86d2ce14c93bf40/
+- **[Testdata]**: https://box.nju.edu.cn/d/80f52336bbf04ab1a9a6/
 - **[Results]**: https://box.nju.edu.cn/d/b74e418c1dd94ddb847a/
-- **[Pretrained Models]**: https://box.nju.edu.cn/f/76357443b0cd4e689ce4/
+- **[Pretrained Models]**: https://box.nju.edu.cn/f/3bf11a6700fd4466be5c/
 - Training Dataset: ShapeNet (https://box.nju.edu.cn/f/5c5e4568bb614f54b813/);  KITTI
 
 
