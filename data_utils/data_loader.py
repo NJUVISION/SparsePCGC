@@ -33,7 +33,6 @@ def load_sparse_tensor(filedir, voxel_size=1, resolution=None, qlevel=None, quan
 
     return x
 
-
 class InfSampler(torch.utils.data.sampler.Sampler):
     """Samples elements randomly, without replacement.
     Arguments:
@@ -63,7 +62,7 @@ class InfSampler(torch.utils.data.sampler.Sampler):
     def __len__(self):
         return len(self.data_source)
 
-
+######################## static point cloud ############################
 def collate_pointcloud_fn(list_data):
     new_list_data = []
     num_removed = 0
@@ -110,6 +109,7 @@ class PCDataset(torch.utils.data.Dataset):
             # import time
             # start = time.time()
             coords = read_coords(filedir)
+            # coords = quantize_precision(coords, precision=self.voxel_size, quant_mode='round', return_offset=False)
             if self.voxel_size is not None:
                 coords = quantize_precision(coords, precision=self.voxel_size, quant_mode='round', return_offset=False)
             elif self.resolution is not None:
@@ -172,6 +172,21 @@ class PCDatasetOffset(torch.utils.data.Dataset):
             elif self.qlevel is not None:
                 coords, _, _, _, offset = quantize_octree(coords, qlevel=self.qlevel, quant_mode='round', return_offset=True)
             coords, offset = merge_points(coords, offset)
+            # coords = np.unique(coords.astype('int'), axis=0).astype('int')
+            # print('DBG!!! loading time', round(time.time() - start, 4), filedir, len(coords), coords.max() - coords.min())
+            # print('DBG!!! loading', len(coords), coords.max() - coords.min())
+            # if self.augment: 
+            #     coords = random_quantize(coords)
+            #     # print('DBG!!! augment', coords.max() - coords.min())
+            # if len(coords) > self.max_num:
+            #     print('DBG', len(coords), self.max_num)
+            #     parts = kdtree_partition(coords, max_num=self.max_num)
+            #     coords = random.sample(parts, 1)[0]
+            #     print('DBG!!! partition', len(parts), len(coords))
+            # # transform
+            # if self.transforms is not None:
+            #     for trans in self.transforms:
+            #         coords = trans(coords)
             feats = offset.astype("float32")
             self.cache[idx] = (coords, feats)
 
@@ -201,35 +216,35 @@ if __name__ == '__main__':
     import argparse
     parser = argparse.ArgumentParser(
         formatter_class=argparse.ArgumentDefaultsHelpFormatter)
-    parser.add_argument("--filedir", default='')
-    parser.add_argument("--rootdir", default='')
+    parser.add_argument("--filedir", default='../testdata/kitti_seqs11_000000.bin')
+    parser.add_argument("--rootdir", default='../../dataset/sparsepcgc_testdata/Ford/')
     parser.add_argument("--voxel_size", type=float, default=1)
     parser.add_argument("--resolution", type=float, default=4096)
     parser.add_argument("--qlevel", type=float, default=12)
-    parser.add_argument("--max_num", type=int, default=1e7)
+    parser.add_argument("--max_num", type=int, default=10000000)
     parser.add_argument("--augment", action="store_true", help="test or not.")# random_quantize
     args = parser.parse_args()
     filedirs = sorted(glob.glob(os.path.join(args.rootdir,'**', f'*.h5'), recursive=True) + \
                     glob.glob(os.path.join(args.rootdir,'**', f'*.ply'), recursive=True) + \
                     glob.glob(os.path.join(args.rootdir,'**', f'*.bin'), recursive=True))
 
-
-    # # x = load_sparse_tensor(args.filedir, voxel_size=args.voxel_size)
-    # x = load_sparse_tensor(args.filedir, voxel_size=None, resolution=args.resolution)
-    # # print(x)
-    # print('x:\t', len(x), x.C.max().item() - x.C.min().item())
+    #################### static point cloud ###################
+    # x = load_sparse_tensor(args.filedir, voxel_size=args.voxel_size)
+    x = load_sparse_tensor(args.filedir, voxel_size=None, resolution=args.resolution)
+    # print(x)
+    print('x:\t', len(x), x.C.max().item() - x.C.min().item())
 
     # test_dataset = PCDataset(filedirs, transforms=None, voxel_size=args.voxel_size, resolution=None,
     #                         max_num=args.max_num, augment=args.augment)
     # test_dataset = PCDataset(filedirs, transforms=None, voxel_size=None, resolution=args.resolution, 
     #                         qlevel=args.qlevel, max_num=args.max_num, augment=args.augment)
 
-    # test_dataset = PCDatasetOffset(filedirs, transforms=None, voxel_size=None, resolution=args.resolution, 
-    #                         qlevel=None, max_num=args.max_num, augment=args.augment)
+    test_dataset = PCDatasetOffset(filedirs, transforms=None, voxel_size=None, resolution=args.resolution, 
+                            qlevel=None, max_num=args.max_num, augment=args.augment)
 
-    # test_dataloader = make_data_loader(
-    #     dataset=test_dataset, batch_size=1, shuffle=True, num_workers=1, repeat=False,
-    #     collate_fn=collate_pointcloud_fn)
-    # for idx, (coords, feats) in enumerate(tqdm(test_dataloader)):
-    #     print("idx:", len(coords), coords.max().item() - coords.min().item())
-    #     print(feats.shape, feats)
+    test_dataloader = make_data_loader(
+        dataset=test_dataset, batch_size=1, shuffle=True, num_workers=1, repeat=False,
+        collate_fn=collate_pointcloud_fn)
+    for idx, (coords, feats) in enumerate(tqdm(test_dataloader)):
+        print("idx:", len(coords), coords.max().item() - coords.min().item())
+        print(feats.shape, feats)

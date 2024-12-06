@@ -1,3 +1,13 @@
+"""
+python dataset.py --process='partition' --input_rootdir='/home/temp/wjq/dataset/Microsoft/origin/phil10/plyfile/' \
+    --output_rootdir='/home/temp/wjq/dataset/testdata_voxeldnn/phil10' --num_points=1200000 --input_format='ply' --output_format='ply'
+
+python dataset.py --process='quantize' --precision=0.001 --input_rootdir='../../dataset/sparsepcgc_testdata/KITTI/' \ 
+    --output_rootdir='../../dataset/sparsepcgc_testdata/KITTI_q1mm/' --input_format='bin' --output_format='ply'
+
+python dataset.py --process='quantize' --precision=0.02 --input_rootdir='../../dataset/sparsepcgc_testdata/KITTI/' \
+    --output_rootdir='../../dataset/sparsepcgc_testdata/KITTI_q2cm/' --input_format='bin' --output_format='ply'
+"""
 import os; rootdir = os.path.split(__file__)[0]
 import sys; sys.path.append(rootdir)
 import open3d as o3d
@@ -50,7 +60,7 @@ def main_mesh2pc(input_rootdir, output_rootdir, input_format, output_format, inp
         # random rotate
         points = random_rotate(points)
         # quantize
-        points, _, _ = quantize_resolution(points, resolution=resolution, return_offset=False)
+        points = quantize_resolution(points, resolution=resolution, eturn_offset=False)
         points = np.unique(points, axis=0)
         print("DBG!!! nums:\t", len(points))
         # save
@@ -153,3 +163,29 @@ if __name__ == "__main__":
                     input_format=args.input_format, output_format=args.output_format, 
                     input_length=args.input_length, output_length=args.output_length,
                     precision=args.precision)
+
+
+    # filedir_list_ford = sorted(glob.glob(os.path.join('/home/temp/wjq/dataset/sparsepcgc_testdata/Ford/','**', f'*.ply'), recursive=True))
+    # input_rootdir = '/home/temp/wjq/dataset/Ford/origin/'
+    # filedir_list_ford = sorted(glob.glob(os.path.join(input_rootdir,'**', f'*.ply'), recursive=True))[::50]
+    # print(filedir_list_ford)
+    # output_rootdir = '/home/temp/wjq/dataset/Ford/test/test90/'
+    # import shutil
+    # for idx, input_filedir in enumerate(filedir_list_ford):
+    #     output_filedir = os.path.join(output_rootdir, input_filedir[len(input_rootdir):])
+    #     output_folder, _ = os.path.split(output_filedir)
+    #     print('debug:\t', idx, input_filedir, '\t:', output_filedir)
+    #     os.makedirs(output_folder, exist_ok=True)
+    #     shutil.copyfile(input_filedir, output_filedir)
+
+
+    # filedir_list_kitti = sorted(glob.glob(os.path.join('/home/temp/wjq/dataset/sparsepcgc_testdata/KITTI/','**', f'*.bin'), recursive=True))
+    # output_rootdir = '/home/temp/wjq/dataset/KITTI_110'
+    # import shutil
+    # for idx, input_filedir in enumerate(filedir_list_kitti):
+    #     filename = os.path.split(input_filedir)[-1]
+    #     output_filedir = os.path.join(output_rootdir, str(idx)+'_'+filename)
+    #     output_folder, _ = os.path.split(output_filedir)
+    #     print('debug:\t', idx, input_filedir, '\t:', output_filedir)
+    #     os.makedirs(output_folder, exist_ok=True)
+    #     shutil.copyfile(input_filedir, output_filedir)

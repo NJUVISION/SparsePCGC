@@ -6,9 +6,10 @@ sys.path.append(rootdir)
 import subprocess
 import time
 import numpy as np
+# import os; rootdir = os.path.split(__file__)[0]
+# import sys; sys.path.append(os.path.abspath('..'))
 from data_utils.inout import read_ply_o3d, write_ply_o3d
 import open3d as o3d
-
 
 def number_in_line(line):
     wordlist = line.split(' ')
@@ -19,6 +20,16 @@ def number_in_line(line):
     return number
 
 def pc_error(infile1, infile2, resolution, normal=False, show=False):
+    start_time = time.time()
+    # headersF = ["mse1      (p2point)", "mse1,PSNR (p2point)", 
+    #            "h.       1(p2point)", "h.,PSNR  1(p2point)",
+    #            "mse2      (p2point)", "mse2,PSNR (p2point)", 
+    #            "h.       2(p2point)", "h.,PSNR  2(p2point)" ,
+    #            "mseF      (p2point)", "mseF,PSNR (p2point)", 
+    #            "h.        (p2point)", "h.,PSNR   (p2point)" ]
+    # headersF_p2plane = ["mse1      (p2plane)", "mse1,PSNR (p2plane)",
+    #                   "mse2      (p2plane)", "mse2,PSNR (p2plane)",
+    #                   "mseF      (p2plane)", "mseF,PSNR (p2plane)"]             
     headers = ["mseF      (p2point)", "mseF,PSNR (p2point)"]
     rootdir = os.path.split(__file__)[0]
     command = str(rootdir+'/pc_error_d' + 
@@ -56,8 +67,7 @@ def chamfer_dist(a, b):
     return distA, distB
 
 def get_PSNR_VCN(f1, f2):
-    """PSNR calculation methods of VoxelContextNet.
-    pc0: origin data;    pc1: decded data
+    """pc0: origin data;    pc1: decded data
     """
     pc0 = read_ply_o3d(f1, dtype='float32')
     pc1 = read_ply_o3d(f2, dtype='float32')
@@ -82,8 +92,7 @@ def get_PSNR_VCN(f1, f2):
     return {'mse':max(mse0 ,mse1), 'psnr':min(psnr0, psnr1)}
     
 def get_PSNR_attn(f1, f2, resolution=1, test_d2=False):
-    """PSNR calculation methods of OctAttention.
-    pc0: origin data;    pc1: decded data
+    """pc0: origin data;    pc1: decded data
     """
     points1 = read_ply_o3d(f1, dtype='float32')
     points2 = read_ply_o3d(f2, dtype='float32')

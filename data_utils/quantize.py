@@ -186,6 +186,65 @@ def quantize_sparse_tensor(x, factor, return_offset=False, quant_mode='round'):
 
     return out
 
+if __name__ == '__main__':
+    import os; rootdir = os.path.split(__file__)[0]
+    import sys; sys.path.append(rootdir)
+    import argparse
+    parser = argparse.ArgumentParser(
+        formatter_class=argparse.ArgumentDefaultsHelpFormatter)
+    parser.add_argument("--filedir", type=str, default='../testdata/kitti_seqs11_000000.bin')
+    # ../testdata/longdress_vox10_1300.ply
+    args = parser.parse_args()
+ 
+    # read points
+    from inout import read_coords
+    points = read_coords(args.filedir)
+    print(points)
+    print(len(points), points.min(), points.max())
+
+    # quantize
+    pointsQ, error = quantize(points, precision=0.001, resolution=None, 
+                            offset='min', quant_mode='round', DBG=False)
+    # print(pointsQ)
+    print(len(pointsQ), pointsQ.min(), pointsQ.max())
+
+    # concert to sparse tensor
+    coords = torch.tensor(pointsQ).int()
+    feats = torch.ones((len(coords),1)).float()
+    coords, feats = ME.utils.sparse_collate([coords], [feats])
+    x = ME.SparseTensor(features=feats,  coordinates=coords, tensor_stride=1, device='cuda')
+    print(x.C.shape[0], x.C.cpu().numpy().max())
+
+    # scaling sparse tensor
+    import time
+    start = time.time()
+    x1 = quantize_sparse_tensor(x, factor=1/2, return_offset=False)
+    print('time:', round(time.time() - start, 4))
+    print(x1.C.shape[0], x1.C.cpu().numpy().max())
+    print(x1.F.cpu().numpy().max(), x1.F.cpu().numpy().min(), x1.F.cpu().numpy().mean())
+    # print(x1.F.cpu().numpy())
+
+    from quantize_old import scale_sparse_tensor
+    from sparse_tensor import sort_sparse_tensor
+    x2 = scale_sparse_tensor(x, factor=1/2)
+    print('time:', round(time.time() - start, 4))
+    print(x2.C.shape[0], x2.C.cpu().numpy().max())
+    print(x2.F.cpu().numpy().max(), x2.F.cpu().numpy().min(), x2.F.cpu().numpy().mean())
+    # print(x2.F.cpu().numpy())
+
+    print((sort_sparse_tensor(x1).C - sort_sparse_tensor(x2).C).abs().max())
+    print((sort_sparse_tensor(x1).F - sort_sparse_tensor(x2).F).abs().max())
+
+
+    # from quantize_old import get_offset_sparse_tensor
+    # x2 = get_offset_sparse_tensor(x, factor=1/256)
+    # print('time:', round(time.time() - start, 4))
+    # print(x2.C.shape[0], x2.C.cpu().numpy().max())
+    # print(x2.F.cpu().numpy().max(), x2.F.cpu().numpy().min(), x2.F.cpu().numpy().mean())
+    # # print(x2.F.cpu().numpy())
+
+    # print((x1.C - x2.C).abs().max())
+    # print((x1.F - x2.F).abs().max())
 
 
 
